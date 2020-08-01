@@ -46,5 +46,5 @@ rm -rf ibus-%{engine_name}-%{version}
 rm -rf %{buildroot}
 
 %changelog
-* Wed Aug 14 2019 LuongThanhLam <ltlam93@gmail.com> 0.5.3
-- Initial RPM release
+* Thu Apr 30 2020 LuongThanhLam <ltlam93@gmail.com> 0.6.5
+- Fix SEGV on Wayland
