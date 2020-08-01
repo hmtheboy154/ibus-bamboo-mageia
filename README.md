@@ -36,40 +36,8 @@ IBus Bamboo - Bộ gõ tiếng Việt cho Linux
    ![ibus-bamboo](https://github.com/BambooEngine/ibus-bamboo/raw/gh-resources/demo.gif)
 
 ## Hướng dẫn cài đặt
-### Ubuntu và các distro tương tự
-
-```sh
-sudo add-apt-repository ppa:bamboo-engine/ibus-bamboo
-sudo apt-get update
-sudo apt-get install ibus-bamboo
-ibus restart
-```
-
-### Arch Linux và các distro tương tự
-Với Arch Linux, bạn có thể build từ AUR bằng yay:
-```sh
-yay -S ibus-bamboo
-```
-Hoặc bằng pamac:
-```sh
-pamac build ibus-bamboo
-```
-Hoặc build build từ file PKGBUILD:
-```sh
-git clone https://aur.archlinux.org/ibus-bamboo.git
-cd ibus-bamboo
-makepkg -si
-```
-
-### Void Linux
-`ibus-bamboo` đã có mặt trên repo chính của Void Linux. Các bạn có thể cài đặt trực tiếp.
-
-```sh
-sudo xbps-install -S ibus-bamboo
-```
-
-### Cài đặt từ OpenBuildService
-[![OpenBuildService](https://github.com/BambooEngine/ibus-bamboo/raw/gh-resources/obs.png)](https://software.opensuse.org//download.html?project=home%3Alamlng&package=ibus-bamboo)
+### Mageia
+Kiểm tra tab Releases
 
 ## Hướng dẫn sử dụng
 Điểm khác biệt giữa `ibus-bamboo` và các bộ gõ khác là `ibus-bamboo` cung cấp nhiều chế độ gõ khác nhau (1 chế độ gõ có gạch chân và 5 chế độ gõ không gạch chân; tránh nhầm lẫn **chế độ gõ** với **kiểu gõ**, các kiểu gõ bao gồm `telex`, `vni`, ...).
