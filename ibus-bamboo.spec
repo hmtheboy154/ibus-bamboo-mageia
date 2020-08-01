@@ -9,11 +9,11 @@ Release: 1%{?dist}
 Summary: A Vietnamese input method for IBus
 
 License: GPLv3+
-URL: https://github.com/BambooEngine/ibus-bamboo
+URL: https://github.com/hmtheboy154/ibus-bamboo-mageia
 Source0: %{name}-%{version}.tar.gz
 
-BuildRequires: go, libX11-devel, libXtst-devel
-Requires: ibus, libX11, libXtst
+BuildRequires: golang, lib64x11-devel, lib64xtst-devel
+Requires: ibus, lib64x11_6, lib64xtst6
 
 %description
 A Vietnamese IME for IBus using Bamboo Engine.
