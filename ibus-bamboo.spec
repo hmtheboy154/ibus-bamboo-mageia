@@ -9,7 +9,7 @@ Release: 1%{?dist}
 Summary: A Vietnamese input method for IBus
 
 License: GPLv3+
-URL: https://github.com/hmtheboy154/ibus-bamboo-mageia
+URL: https://github.com/BambooEngine/ibus-bamboo
 Source0: %{name}-%{version}.tar.gz
 
 BuildRequires: golang, lib64x11-devel, lib64xtst-devel
