@@ -24,6 +24,7 @@ import (
 	"fmt"
 	"log"
 	"os"
+	"strings"
 
 	"github.com/BambooEngine/goibus/ibus"
 )
@@ -35,8 +36,20 @@ const (
 
 var embedded = flag.Bool("ibus", false, "Run the embedded ibus component")
 var version = flag.Bool("version", false, "Show version")
+var isWayland = false
+var isGnome = false
+
+func hasGnome(env string) bool {
+	return strings.Contains(strings.ToLower(os.Getenv(env)), "gnome")
+}
 
 func main() {
+	if os.Getenv("WAYLAND_DISPLAY") != "" {
+		isWayland = true
+	}
+	if hasGnome("XDG_CURRENT_DESKTOP") || hasGnome("DESKTOP_SESSION") || hasGnome("GDMSESSION") {
+		isGnome = true
+	}
 	flag.Parse()
 	if *embedded {
 		os.Chdir(DataDir)

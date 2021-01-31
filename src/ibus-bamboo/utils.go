@@ -122,14 +122,14 @@ var imBackspaceList = []int{
 }
 
 type Config struct {
-	InputMethod               string
-	InputMethodDefinitions    map[string]bamboo.InputMethodDefinition
-	OutputCharset             string
-	Flags                     uint
-	IBflags                   uint
-	JupiterFlags              uint
-	DefaultInputMode          int
-	InputModeMapping          map[string]int
+	InputMethod            string
+	InputMethodDefinitions map[string]bamboo.InputMethodDefinition
+	OutputCharset          string
+	Flags                  uint
+	IBflags                uint
+	JupiterFlags           uint
+	DefaultInputMode       int
+	InputModeMapping       map[string]int
 }
 
 func getConfigDir(ngName string) string {
@@ -151,14 +151,18 @@ func getConfigPath(engineName string) string {
 }
 
 func loadConfig(engineName string) *Config {
+	var flags = IBstdFlags
+	if isGnome {
+		flags &= ^IBmouseCapturing
+	}
 	var c = Config{
-		InputMethod:               "Telex",
-		OutputCharset:             "Unicode",
-		InputMethodDefinitions:    bamboo.GetInputMethodDefinitions(),
-		Flags:                     bamboo.EstdFlags,
-		IBflags:                   IBstdFlags,
-		DefaultInputMode:          preeditIM,
-		InputModeMapping:          map[string]int{},
+		InputMethod:            "Telex",
+		OutputCharset:          "Unicode",
+		InputMethodDefinitions: bamboo.GetInputMethodDefinitions(),
+		Flags:                  bamboo.EstdFlags,
+		IBflags:                flags,
+		DefaultInputMode:       preeditIM,
+		InputModeMapping:       map[string]int{},
 	}
 
 	setupConfigDir(engineName)
@@ -244,9 +248,9 @@ func addToWhiteList(list []string, classes string) []string {
 	return append(list, classes)
 }
 
-func getCharsetFromPropKey(str string) (string, bool) {
+func getValueFromPropKey(str, key string) (string, bool) {
 	var arr = strings.Split(str, "::")
-	if len(arr) == 2 {
+	if len(arr) == 2 && arr[0] == key {
 		return arr[1], true
 	}
 	return str, false

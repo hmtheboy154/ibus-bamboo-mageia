@@ -24,6 +24,7 @@ import (
 	"log"
 	"os/exec"
 	"reflect"
+	"strconv"
 	"sync"
 
 	"github.com/BambooEngine/bamboo-core"
@@ -52,6 +53,7 @@ type IBusBambooEngine struct {
 	emoji                  *EmojiEngine
 	isSurroundingTextReady bool
 	lastKeyWithShift       bool
+	lastCommitText         int64
 }
 
 /**
@@ -83,7 +85,7 @@ func (e *IBusBambooEngine) ProcessKeyEvent(keyVal uint32, keyCode uint32, state 
 	if e.isIgnoredKey(keyVal, state) {
 		return false, nil
 	}
-	log.Printf("ProcessKeyEvent >  %c | keyCode 0x%04x keyVal 0x%04x | %d\n", rune(keyVal), keyCode, keyVal, len(keyPressChan))
+	log.Printf(">ProcessKeyEvent >  %c | keyCode 0x%04x keyVal 0x%04x | %d\n", rune(keyVal), keyCode, keyVal, len(keyPressChan))
 	if e.config.IBflags&IBinputModeLookupTableEnabled != 0 && keyVal == IBusOpenLookupTable && !e.isInputModeLTOpened && e.wmClasses != "" {
 		e.resetBuffer()
 		e.isInputModeLTOpened = true
@@ -395,7 +397,11 @@ func (e *IBusBambooEngine) PropertyActivate(propName string, propState uint32) *
 		}
 	}
 
-	var charset, foundCs = getCharsetFromPropKey(propName)
+	var im, foundIm = getValueFromPropKey(propName, "InputMode")
+	if foundIm && propState == ibus.PROP_STATE_CHECKED {
+		e.config.DefaultInputMode, _ = strconv.Atoi(im)
+	}
+	var charset, foundCs = getValueFromPropKey(propName, "OutputCharset")
 	if foundCs && isValidCharset(charset) && propState == ibus.PROP_STATE_CHECKED {
 		e.config.OutputCharset = charset
 	}
