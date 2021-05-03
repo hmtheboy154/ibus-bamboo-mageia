@@ -86,7 +86,7 @@ func (e *IBusBambooEngine) ProcessKeyEvent(keyVal uint32, keyCode uint32, state 
 		return false, nil
 	}
 	log.Printf(">ProcessKeyEvent >  %c | keyCode 0x%04x keyVal 0x%04x | %d\n", rune(keyVal), keyCode, keyVal, len(keyPressChan))
-	if e.config.IBflags&IBinputModeLookupTableEnabled != 0 && keyVal == IBusOpenLookupTable && !e.isInputModeLTOpened && e.wmClasses != "" {
+	if e.config.IBflags&IBinputModeLookupTableEnabled != 0 && keyVal == IBusOpenLookupTable && !e.isInputModeLTOpened && e.getWmClass() != "" {
 		e.resetBuffer()
 		e.isInputModeLTOpened = true
 		e.lastKeyWithShift = true
@@ -118,22 +118,21 @@ func (e *IBusBambooEngine) ProcessKeyEvent(keyVal uint32, keyCode uint32, state 
 
 func (e *IBusBambooEngine) FocusIn() *dbus.Error {
 	log.Print("FocusIn.")
-	var oldWmClasses = e.wmClasses
-	e.wmClasses = x11GetFocusWindowClass()
-	fmt.Printf("WM_CLASS=(%s)\n", e.wmClasses)
-
+	var latestWm string
+	if isGnome && isGnomeOverviewVisible() {
+		latestWm = ""
+	} else {
+		latestWm = e.getLatestWmClass()
+	}
+	e.checkWmClass(latestWm)
 	e.RegisterProperties(e.propList)
 	e.RequireSurroundingText()
-	if oldWmClasses != e.wmClasses {
-		e.resetBuffer()
-		e.resetFakeBackspace()
-	}
+	fmt.Printf("WM_CLASS=(%s)\n", e.getWmClass())
 	return nil
 }
 
 func (e *IBusBambooEngine) FocusOut() *dbus.Error {
 	log.Print("FocusOut.")
-	//e.wmClasses = ""
 	return nil
 }
 
@@ -346,7 +345,7 @@ func (e *IBusBambooEngine) PropertyActivate(propName string, propState uint32) *
 	if propName == PropKeyMacroEnabled {
 		if propState == ibus.PROP_STATE_CHECKED {
 			e.config.IBflags |= IBmacroEnabled
-			e.config.IBflags |= IBautoCapitalizeMacro
+			// e.config.IBflags |= IBautoCapitalizeMacro
 			e.macroTable.Enable(e.engineName)
 		} else {
 			e.config.IBflags &= ^IBmacroEnabled
